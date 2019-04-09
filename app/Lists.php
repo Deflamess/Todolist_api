@@ -14,5 +14,13 @@ class Lists extends Model
         'list_name'
     ];
 
+    protected function todo()
+    {
+        return $this->hasMany(ToDo::class);
+    }
 
+    protected function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

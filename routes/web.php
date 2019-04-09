@@ -15,9 +15,11 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+// Lists routes
+$router->get('/lists', 'ListsController@getAllLists');
+$router->get('/list/{id}', 'ListsController@getListById');
+$router->post('/list', 'ListsController@saveList');
+$router->delete('/list/{id}', 'ListsController@deleteList');
+$router->put('/list/{id}', 'ListsController@updateList');
 
-$router->get('/lists', 'ToDoController@getLists');
-$router->get('/list/{id}', 'ToDoController@getList');
-$router->post('/user/', 'UserController@saveUser');
-$router->delete('/user/{id}', 'UserController@deleteUser');
-$router->patch('/user/{id}', 'UserController@updateUser');
+

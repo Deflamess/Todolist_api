@@ -47,8 +47,8 @@ $app->singleton(
 );
 
 $app->singleton(
-    App\Services\ToDoServiceInterface::class,
-    App\Services\ToDoService::class
+    App\Services\ListsServiceInterface::class,
+    App\Services\ListsService::class
 );
 /*
 |--------------------------------------------------------------------------

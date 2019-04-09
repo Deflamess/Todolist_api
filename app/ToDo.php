@@ -13,4 +13,9 @@ class ToDo extends Model
       'list_id',
       'is_done'
     ];
+
+    protected function lists()
+    {
+        return $this->belongsTo(Lists::class);
+    }
 }
