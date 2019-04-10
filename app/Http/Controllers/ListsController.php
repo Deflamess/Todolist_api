@@ -36,9 +36,14 @@ class ListsController extends Controller
         return $this->toDoList->delete($id);
     }
 
+    // правильно так ловить исключения? объявил в сервисах, словил в контроллере
     public function updateList(Request $request)
     {
-        return $this->toDoList->update($request);
+        try{
+            return $this->toDoList->update($request);
+        } catch (\Exception $e){
+            echo 'Caught exception: ',  $e->getMessage(), "\n";
+        }
     }
 
 }

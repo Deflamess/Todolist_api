@@ -14,8 +14,12 @@ class ToDo extends Model
       'is_done'
     ];
 
-    protected function lists()
+    public function lists()
     {
         return $this->belongsTo(Lists::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

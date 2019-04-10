@@ -50,6 +50,11 @@ $app->singleton(
     App\Services\ListsServiceInterface::class,
     App\Services\ListsService::class
 );
+
+$app->singleton(
+    App\Services\ToDoServiceInterface::class,
+    App\Services\ToDoService::class
+);
 /*
 |--------------------------------------------------------------------------
 | Register Middleware

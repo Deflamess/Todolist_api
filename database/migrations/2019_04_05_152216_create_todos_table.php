@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTodoTable extends Migration
+class CreateToDosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateTodoTable extends Migration
      */
     public function up()
     {
-        Schema::create('todo', function (Blueprint $table) {
+        Schema::create('to_dos', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('task_name', 255);
             $table->integer('author_id');
             $table->integer('assigned_to_id');
-            $table->integer('list_id');
+            $table->integer('lists_id');
             $table->boolean('is_done');
             $table->timestamps();
         });
@@ -31,6 +31,6 @@ class CreateTodoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('todo');
+        Schema::dropIfExists('to_dos');
     }
 }

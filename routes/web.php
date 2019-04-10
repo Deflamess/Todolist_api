@@ -22,4 +22,10 @@ $router->post('/list', 'ListsController@saveList');
 $router->delete('/list/{id}', 'ListsController@deleteList');
 $router->put('/list/{id}', 'ListsController@updateList');
 
+// Todo routes
+$router->get('/todo/{id}', 'ToDoController@get');
+$router->post('/todo', 'ToDoController@saveList');
+$router->delete('/todo/{id}', 'ToDoController@deleteList');
+$router->put('/todo/{id}', 'ToDoController@updateList');
+
 

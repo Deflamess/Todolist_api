@@ -30,8 +30,13 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'password',
     ];
 
-    protected function lists()
+    public function lists()
     {
         return $this->hasMany(Lists::class);
+    }
+
+    public function todo()
+    {
+        return $this->hasMany(ToDo::class);
     }
 }
