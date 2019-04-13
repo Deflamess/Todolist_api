@@ -58,7 +58,7 @@ class ToDoService implements ToDoServiceInterface
             return response()->json(
                 ['error' => [
                     'message' => 'Unsupported data'
-                ]], Response::HTTP_CONFLICT
+                ]], Response::HTTP_BAD_REQUEST
             );
         }
     }
