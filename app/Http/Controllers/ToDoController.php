@@ -12,7 +12,7 @@ namespace App\Http\Controllers;
 use App\Services\ToDoServiceInterface;
 use Illuminate\Http\Request;
 
-class ToDoController
+class ToDoController extends Controller
 {
     protected $toDo;
 
@@ -32,6 +32,14 @@ class ToDoController
 
     public function saveToDo(Request $request)
     {
+        $this->validate($request, [
+            'task_name' => 'required',
+            'author_id' => 'required',
+            'assigned_to_id' => 'required',
+            'lists_id' => 'required',
+            'is_done' => 'required'
+        ]);
+
         return $this->toDo->save($request);
     }
 }

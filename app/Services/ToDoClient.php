@@ -52,10 +52,14 @@ class ToDoClient implements ToDoClientInterface
     // на ToDoService который уже пишет в БД?
     public function post(array $data)
     {
-       $postData = $this->client->request('POST','http://127.0.0.1:8000/todo');
+       $postData = $this->client->request('POST','http://127.0.0.1:8000/todo',
+           [
+               'body' => json_encode($data)
+           ]
+       );
 
-       $postContent = $postData->getBody()->getContents();
-       return json_decode($postContent, true);
+       $response = json_decode($postData->getBody()->getContents(), true);
+       return  $response;
     }
 
     public function delete($id)

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Lists;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -63,9 +64,10 @@ class ListsService implements ListsServiceInterface
      */
     public function getLists()
     {
-        $lists = Lists::all('list_name');
+        /** @var Collection $lists */
+        $lists = Lists::all('id', 'list_name');
 
-        if ( empty($lists) ) {
+        if ( $lists->isEmpty() ) {
             return response()->json(
                 ['error' => [
                     'message' => 'Lists not found'
