@@ -11,21 +11,56 @@ namespace App\Services;
 
 use App\ToDo;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ToDoService implements ToDoServiceInterface
 {
 
     public function get($id)
     {
-        $list = ToDo::select('task_name', 'author_id', 'is_done')->where('id', '=', $id )->first();
+        $list = ToDo::select('task_name', 'author_id', 'assigned_to_id', 'is_done')->where('id', '=', $id )->first();
         //$list = ToDo::with('lists')->get();
-        dd($list);
+        //dd($list);
+
         return response()->json($list);
     }
 
+
     public function save(Request $request)
     {
-        // TODO: Implement save() method.
+        // check content type
+        $contentType = $request->header('content-type');
+
+        //if not json in request - return 409
+        if ( $contentType == 'application/json' )
+        {
+            //$id = $request->get('id');
+            $taskName = $request->get('task_name');
+            $result = ToDo::where('task_name','=', $taskName)->first();
+
+            //if ToDo already in DB
+            if ( !empty($result) ) {
+                return response()->json(
+                    ['error' => [
+                        'message' => 'Todo already exists'
+                    ]], Response::HTTP_CONFLICT
+                );
+            }
+
+            $toDoToSave = $request->all();
+
+            $createdToDo = ToDo::create($toDoToSave);
+            return response(null, Response::HTTP_CREATED,
+                ['Location' => '/todo/' . $createdToDo->id]
+            );
+
+        } else {
+            return response()->json(
+                ['error' => [
+                    'message' => 'Unsupported data'
+                ]], Response::HTTP_CONFLICT
+            );
+        }
     }
 
     public function delete($id)

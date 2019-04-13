@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\DB;
 class ListsService implements ListsServiceInterface
 {
     /**
+     * Get list by ID with tasks(todo's)
+     *
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
@@ -19,29 +21,29 @@ class ListsService implements ListsServiceInterface
         // return object lists with list_name by provided id
         $list = Lists::select('list_name')->where('id', '=', $id)->first();
 
-/* training block */
-
         // return collection of one (lists) with todo's by provided id
         $data = Lists::with('todo')->where('id', '=', $id)->get();
 
+    /* training block */
+
         //return collection of many lists with todo's
-        $data = Lists::with('todo')->get();
+        //$data = Lists::with('todo')->get();
 
-        dd($data);
-
-        $assignTo = [];
-        $data->each(function($value, $key) use ($assignTo) {
-            $assignTo[] = $value->todo->each(function($value, $key)  {
-                $assignTo[] = $value->assigned_to_id;
-                dump($assignTo);
+        /* $responseData = [];
+        $data->each(function($value, $key) use ($responseData) {
+            $this->responseData[] = $value->list_name;
+            $value->todo->each(function($value, $key) use ($responseData) {
+                $this->responseData[] = $value->task_name;
+                $this->responseData[] = $value->assigned_to_id;
+                $this->responseData[] = $value->author_id;
             });
         });
-// достается массив после ич только через $this, а так пустой, хотя мы делаем use $assignTo
-        dd($assignTo);
 
+        // достается массив после each только через $this, а так пустой, хотя мы делаем use $responseData
+        //dd($this->responseData);*/
+     /**************************/
 
-        /**************************/
-
+        //if list isn't in DB response 404
         if ( empty($list) ) {
             return response()->json(
                 ['error' => [
@@ -51,10 +53,12 @@ class ListsService implements ListsServiceInterface
         }
 
 
-        return response()->json($list);
+        return response()->json($data);
     }
 
     /**
+     * Return all Lists stored
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function getLists()
@@ -74,6 +78,8 @@ class ListsService implements ListsServiceInterface
     }
 
     /**
+     * Save new list
+     *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse|Response|\Laravel\Lumen\Http\ResponseFactory
      */
@@ -82,13 +88,14 @@ class ListsService implements ListsServiceInterface
         // check content type
         $contentType = $request->header('content-type');
 
-
+        //if not json in request - return 409
         if ( $contentType == 'application/json' )
         {
             //$id = $request->get('id');
             $listName = $request->get('list_name');
             $result = Lists::where('list_name','=', $listName)->first();
 
+            //if list already in DB
             if ( !empty($result) ) {
                 return response()->json(
                     ['error' => [
@@ -101,14 +108,12 @@ class ListsService implements ListsServiceInterface
                 'list_name' => $listName,
             ];
 
-            /** Model variant*/
             $createdList = Lists::create($listToSave);
             return response(null, Response::HTTP_CREATED,
                 ['Location' => '/list/' . $createdList->id]
             );
 
         } else {
-            //if not json in request - return 409
             return response()->json(
                 ['error' => [
                     'message' => 'Unsupported data'
@@ -118,6 +123,8 @@ class ListsService implements ListsServiceInterface
     }
 
     /**
+     * Delete list by ID
+     *
      * @param $id
      * @return \Illuminate\Http\JsonResponse|Response|\Laravel\Lumen\Http\ResponseFactory
      */
@@ -140,6 +147,8 @@ class ListsService implements ListsServiceInterface
     }
 
     /**
+     * Update list by id with array of data to be written
+     *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse|Response|\Laravel\Lumen\Http\ResponseFactory
      * @throws \Exception
@@ -148,6 +157,7 @@ class ListsService implements ListsServiceInterface
     {
         $dataToUpdate = $request->all();
         $id = $request->get('id');
+
         if ( ! $id )
             throw new \Exception('id not provided');
 
