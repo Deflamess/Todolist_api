@@ -55,6 +55,11 @@ $app->singleton(
     App\Services\ToDoServiceInterface::class,
     App\Services\ToDoService::class
 );
+
+$app->singleton(
+    App\Services\ToDoClientInterface::class,
+    App\Services\ToDoClient::class
+);
 /*
 |--------------------------------------------------------------------------
 | Register Middleware

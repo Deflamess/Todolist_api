@@ -24,8 +24,10 @@ $router->put('/list/{id}', 'ListsController@updateList');
 
 // Todo routes
 $router->get('/todo/{id}', 'ToDoController@get');
-$router->post('/todo', 'ToDoController@saveList');
-$router->delete('/todo/{id}', 'ToDoController@deleteList');
-$router->put('/todo/{id}', 'ToDoController@updateList');
+$router->post('/todo', 'ToDoController@saveToDo');
+$router->delete('/todo/{id}', 'ToDoController@deleteToDo');
+$router->put('/todo/{id}', 'ToDoController@updateToDo');
 
-
+// TodoClient routes
+$router->get('/lists/{id}', 'ToDoClientController@getListById');
+$router->post('/todos', 'ToDoClientController@saveToDo');

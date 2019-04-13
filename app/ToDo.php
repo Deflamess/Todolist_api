@@ -10,7 +10,7 @@ class ToDo extends Model
       'task_name',
       'author_id',
       'assigned_to_id',
-      'list_id',
+      'lists_id',
       'is_done'
     ];
 
