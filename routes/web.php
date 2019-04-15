@@ -30,4 +30,4 @@ $router->put('/todo/{id}', 'ToDoController@updateToDo');
 
 // TodoClient routes
 $router->get('/lists/{id}', 'ToDoClientController@getListById');
-$router->post('/todos', 'ToDoClientController@saveToDo');
+$router->post('/todo-create', 'ToDoClientController@saveTodo');

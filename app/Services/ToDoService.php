@@ -15,7 +15,12 @@ use Illuminate\Http\Response;
 
 class ToDoService implements ToDoServiceInterface
 {
-
+    /**
+     * Get todo by id
+     *
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function get($id)
     {
         $list = ToDo::select('task_name', 'author_id', 'assigned_to_id', 'is_done')->where('id', '=', $id )->first();
@@ -25,13 +30,18 @@ class ToDoService implements ToDoServiceInterface
         return response()->json($list);
     }
 
-
+    /**
+     * Store todo into DB
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|Response|\Laravel\Lumen\Http\ResponseFactory
+     */
     public function save(Request $request)
     {
         // check content type
         $contentType = $request->header('content-type');
 
-        //if not json in request - return 409
+        //if not json in request - return 400
         if ( $contentType == 'application/json' )
         {
             //$id = $request->get('id');

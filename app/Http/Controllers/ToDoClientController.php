@@ -12,9 +12,9 @@ namespace App\Http\Controllers;
 use App\Services\ToDoClientInterface;
 use Illuminate\Http\Request;
 
-class ToDoClientController
+class ToDoClientController extends Controller
 {
-    protected $client;
+    private $client;
 
     /**
      * Dependency Injection with ToDoClientInterface
@@ -34,13 +34,13 @@ class ToDoClientController
         try{
             return $this->client->get($id);
         } catch (\Exception $e) {
-            echo $e->getMessage() ."\n";
+            return $e->getMessage() ."\n";
         }
     }
 
 
-    public function saveToDo(array $data)
+    public function saveTodo(Request $request)
     {
-        return $this->client->post($data);
+        return $this->client->post($request);
     }
 }

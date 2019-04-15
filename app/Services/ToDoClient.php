@@ -24,7 +24,7 @@ class ToDoClient implements ToDoClientInterface
     public function __construct()
     {
         $this->client = new Client();
-        $this->postData = $this->client->request();
+        //$this->postData = $this->client->request();
     }
 
     /**
@@ -36,30 +36,44 @@ class ToDoClient implements ToDoClientInterface
      */
     public function get($id)
     {
-        $requestedData = $this->client->request('GET','http://127.0.0.1:8000/list/'.$id);
+         try{
+            $requestedData = $this->client->request('GET','http://127.0.0.1:8000/list/'.$id);
 
-        if ($requestedData->getStatusCode() != Response::HTTP_OK) {
-            throw new \Exception('Error' . $requestedData->getStatusCode());
+            if ($requestedData->getStatusCode() != Response::HTTP_OK) {
+                throw new \Exception('Error' . $requestedData->getStatusCode());
+            }
+
+            $content = $requestedData->getBody()->getContents();
+            return json_decode($content, true);
+        } catch (\Exception $e) {
+            return $e->getMessage() ."\n";
         }
-
-        $content = $requestedData->getBody()->getContents();
-        return json_decode($content, true);
     }
 
-    //??? чтобы записать tODO я передаю через газл клиент запрос пост с JSON объектом, перехожу на ссылку, где идет
-    // запись в бд(ToDoService), данных из запроса, если такого tODO уже нет в БД.
-    // как достать данные из клиента? обработать их в конструкторе и потом отдать в метод пост где и отправить пост
-    // на ToDoService который уже пишет в БД?
-    public function post(array $data)
+    /**
+     * Save todos into DB
+     *
+     * @param Request $request
+     * @return Response|\Laravel\Lumen\Http\ResponseFactory|string
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function post(Request $request)
     {
-       $postData = $this->client->request('POST','http://127.0.0.1:8000/todo',
-           [
-               'body' => json_encode($data)
-           ]
-       );
+        try{
+            $data = $request->all();
 
-       $response = json_decode($postData->getBody()->getContents(), true);
-       return  $response;
+            $postData = $this->client->request('POST','http://127.0.0.1:8000/todo',
+               [
+                   'json' => $data,
+               ]
+            );
+
+            return response(null, Response::HTTP_CREATED, [
+                "Location" => $postData->getHeaderLine('Location')
+            ]);
+        } catch (\Exception $e) {
+            return $e->getMessage() ."\n";
+        }
     }
 
     public function delete($id)
@@ -67,7 +81,7 @@ class ToDoClient implements ToDoClientInterface
         // TODO: Implement delete() method.
     }
 
-    public function put($id, array $data)
+    public function put($id, Request $request)
     {
         // TODO: Implement put() method.
     }

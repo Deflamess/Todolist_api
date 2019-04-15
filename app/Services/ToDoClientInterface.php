@@ -14,7 +14,7 @@ use \Illuminate\Http\Request;
 interface ToDoClientInterface
 {
     public function get($id);
-    public function post(array $data);
+    public function post(Request $request);
     public function delete($id);
-    public function put($id, array $data);
+    public function put($id, Request $request);
 }
