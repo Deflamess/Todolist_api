@@ -11,6 +11,7 @@ namespace App\Http\Controllers;
 
 use App\Services\ToDoClientInterface;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ToDoClientController extends Controller
 {
@@ -28,19 +29,48 @@ class ToDoClientController extends Controller
 
     /**
      * Return list by id
+     *
+     * @param $id
      */
     public function getListById($id)
     {
-        try{
+       // try{
             return $this->client->get($id);
-        } catch (\Exception $e) {
+       /* } catch (\Exception $e) {
             return $e->getMessage() ."\n";
-        }
+        }*/
     }
 
-
-    public function saveTodo(Request $request)
+    /**
+     * Stores todo_task in DB
+     *
+     * @param Request $request
+     * @return mixed
+     */
+    public function saveClientToDo(Request $request)
     {
         return $this->client->post($request);
+    }
+
+    /**
+     * Destroy todo_task by id
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function deleteClientToDo($id)
+    {
+        return $this->client->delete($id);
+    }
+
+    /**
+     * Updates todo_task by provided values
+     *
+     * @param Response $request
+     * @return mixed
+     */
+    public function updateClientToDo(Request $request)
+    {
+        return $this->client->put($request);
     }
 }

@@ -25,11 +25,20 @@ class ToDoController extends Controller
         $this->toDo = $toDo;
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function get($id)
     {
         return $this->toDo->get($id);
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function saveToDo(Request $request)
     {
         $this->validate($request, [
@@ -41,5 +50,15 @@ class ToDoController extends Controller
         ]);
 
         return $this->toDo->save($request);
+    }
+
+    public function deleteToDo($id)
+    {
+        return $this->toDo->delete($id);
+    }
+
+    public function updateToDo(Request $request)
+    {
+        return $this->toDo->update($request);
     }
 }

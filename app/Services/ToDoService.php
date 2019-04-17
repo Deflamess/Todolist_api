@@ -12,18 +12,29 @@ namespace App\Services;
 use App\ToDo;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class ToDoService implements ToDoServiceInterface
 {
     /**
-     * Get todo by id
+     * Count if data was updated
+     *
+     * @var int
+     */
+    private $updated = 0;
+
+    /**
+     * Get todo_task by id
      *
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function get($id)
     {
-        $list = ToDo::select('task_name', 'author_id', 'assigned_to_id', 'is_done')->where('id', '=', $id )->first();
+        $list = ToDo::select('task_name', 'author_id', 'assigned_to_id', 'lists_id', 'is_done')
+                ->where('id', '=', $id )
+            ->first();
+
         //$list = ToDo::with('lists')->get();
         //dd($list);
 
@@ -31,7 +42,7 @@ class ToDoService implements ToDoServiceInterface
     }
 
     /**
-     * Store todo into DB
+     * Store todo_task into DB
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse|Response|\Laravel\Lumen\Http\ResponseFactory
@@ -75,12 +86,60 @@ class ToDoService implements ToDoServiceInterface
 
     public function delete($id)
     {
-        // TODO: Implement delete() method.
+        $dataToDestroy = ToDo::destroy($id);
+
+        if (!$dataToDestroy) {
+            return response()->json(
+                ['error' => [
+                    'message' => 'ToDo task not found'
+                ]], Response::HTTP_NOT_FOUND
+            );
+        }
+
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 
     public function update(Request $request)
     {
-        // TODO: Implement update() method.
+        $data = $request->all();
+        $id = $request->get('id');
+
+        //Eloquent method
+        foreach ($data as $key => $value) {
+                $this->result = ToDo::where('id', $id)
+                    ->update([$key => $value]);
+
+                //increments updated if data had updated
+                if( !empty($this->result) )
+                    $this->updated ++;
+        }
+
+        //Facade method
+           /* foreach ($data as $key => $value) {
+
+            //ignore id column
+            if ( $key != 'id' ) {
+                $this->result = DB::update("UPDATE to_dos SET $key = '$value' WHERE id = $id");
+
+                //set updated to true if data had updated
+                if( !empty($this->result) ) {
+                    $this->updated++;
+                }
+
+            }}*/
+
+            //if nothing updated response 404
+            if ( $this->updated <= 1 ) {
+                return response()->json(
+                    ['error' => [
+                        'message' => 'ToDo task not found or has the same value'
+                    ]], Response::HTTP_NOT_FOUND
+                );
+            }
+
+
+
+        return response(null, Response::HTTP_OK);
     }
 
 }

@@ -16,5 +16,5 @@ interface ToDoClientInterface
     public function get($id);
     public function post(Request $request);
     public function delete($id);
-    public function put($id, Request $request);
+    public function put(Request $request);
 }

@@ -165,12 +165,12 @@ class ListsService implements ListsServiceInterface
 
         foreach ($dataToUpdate as $key => $value ) {
 
-            //update only by id received in request
+            //ignore updating id column
             if($key != 'id') {
                 $result = DB::update("UPDATE lists SET $key = '$value' WHERE id = $id");
 
                 //if update didn't complete, list isn't in db or already updated
-                    if (empty($result)) {
+                    if ( empty($result) ) {
                     return response()->json(
                         ['error' => [
                             'message' => 'List not found or already has the same value'
