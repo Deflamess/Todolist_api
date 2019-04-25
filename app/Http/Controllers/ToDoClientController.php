@@ -64,7 +64,7 @@ class ToDoClientController extends Controller
     }
 
     /**
-     * Updates todo_task by provided values
+     * Updates todo_task by provided values with put method
      *
      * @param Response $request
      * @return mixed

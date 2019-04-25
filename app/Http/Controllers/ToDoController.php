@@ -26,6 +26,8 @@ class ToDoController extends Controller
     }
 
     /**
+     * Get todo_task by id
+     *
      * @param $id
      * @return mixed
      */
@@ -35,6 +37,8 @@ class ToDoController extends Controller
     }
 
     /**
+     * Store todo_task by post request
+     *
      * @param Request $request
      * @return mixed
      * @throws \Illuminate\Validation\ValidationException
@@ -53,6 +57,8 @@ class ToDoController extends Controller
     }
 
     /**
+     * Delete todo_task by id
+     *
      * @param $id
      * @return mixed
      */
@@ -62,6 +68,8 @@ class ToDoController extends Controller
     }
 
     /**
+     * Update todo_task by put request
+     *
      * @param Request $request
      * @return mixed
      */

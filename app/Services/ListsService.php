@@ -157,7 +157,7 @@ class ListsService implements ListsServiceInterface
     }
 
     /**
-     * Update list by id with array of data to be written
+     * Update list by id with array of data to be written/updated
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse|Response|\Laravel\Lumen\Http\ResponseFactory
