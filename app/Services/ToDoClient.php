@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Defla
- * Date: 12-Apr-19
- * Time: 18:51
- */
+
 
 namespace App\Services;
 
@@ -72,6 +67,11 @@ class ToDoClient implements ToDoClientInterface
             ]);
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse|Response|\Laravel\Lumen\Http\ResponseFactory|string
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
     public function delete($id)
     {
         try{
@@ -90,9 +90,36 @@ class ToDoClient implements ToDoClientInterface
         }
     }
 
-    public function put($id, Request $request)
+    /**
+     * Updates client's request todo_task in DB
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|Response|\Laravel\Lumen\Http\ResponseFactory|string
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function put(Request $request)
     {
-        // TODO: Implement put() method.
+        try{
+            //$id = $request->get('id');
+            $data = $request->all();
+
+            $result = $this->client->request('PUT', 'http://127.0.0.1:8000/todo/',
+                [
+                    'json' => $data
+                ]
+            );
+
+            if(!$result){
+                return response()->json(
+                    ['error' => [
+                        'message' => 'ToDo task not found'
+                    ]], Response::HTTP_NOT_FOUND
+                );
+            };
+            return response(null, Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return $e->getMessage() ."\n";
+        }
     }
 
 }

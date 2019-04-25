@@ -52,11 +52,19 @@ class ToDoController extends Controller
         return $this->toDo->save($request);
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function deleteToDo($id)
     {
         return $this->toDo->delete($id);
     }
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function updateToDo(Request $request)
     {
         return $this->toDo->update($request);

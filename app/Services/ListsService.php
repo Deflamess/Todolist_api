@@ -40,8 +40,6 @@ class ListsService implements ListsServiceInterface
             });
         });
 
-        // достается массив после each только через $this, а так пустой, хотя мы делаем use $responseData
-        //dd($this->responseData);*/
      /**************************/
 
         //if list isn't in DB response 404
