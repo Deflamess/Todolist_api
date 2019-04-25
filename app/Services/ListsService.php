@@ -64,19 +64,22 @@ class ListsService implements ListsServiceInterface
      */
     public function getLists()
     {
-        /** @var Collection $lists */
-        $lists = Lists::all('id', 'list_name');
+        try {
+            /** @var Collection $lists */
+            $lists = Lists::all('id', 'list_name');
 
-        if ( $lists->isEmpty() ) {
-            return response()->json(
-                ['error' => [
-                    'message' => 'Lists not found'
-                ]], Response::HTTP_NOT_FOUND
-            );
+            if ($lists->isEmpty()) {
+                return response()->json(
+                    ['error' => [
+                        'message' => 'Lists not found'
+                    ]], Response::HTTP_NOT_FOUND
+                );
+            }
+
+            return response()->json($lists);
+        }catch (\Exception $e) {
+            return $e->getMessage() ."\n";
         }
-
-        return response()->json($lists);
-
     }
 
     /**
@@ -89,16 +92,23 @@ class ListsService implements ListsServiceInterface
     {
         // check content type
         $contentType = $request->header('content-type');
+        $method = $request->getMethod();
+        if ( $method != "POST") {
+            return response()->json(
+                ['error' => [
+                    'message' => 'Method not allowed'
+                ]], Response::HTTP_METHOD_NOT_ALLOWED
+            );
+        }
 
         //if not json in request - return 409
-        if ( $contentType == 'application/json' )
-        {
+        if ($contentType == 'application/json') {
             //$id = $request->get('id');
             $listName = $request->get('list_name');
-            $result = Lists::where('list_name','=', $listName)->first();
+            $result = Lists::where('list_name', '=', $listName)->first();
 
             //if list already in DB
-            if ( !empty($result) ) {
+            if (!empty($result)) {
                 return response()->json(
                     ['error' => [
                         'message' => 'List already exists'
